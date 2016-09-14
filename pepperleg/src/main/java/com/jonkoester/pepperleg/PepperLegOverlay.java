@@ -86,7 +86,9 @@ public class PepperLegOverlay extends RelativeLayout {
     }
 
     private void initScreenPositionAndOffsets() {
-        pepperLegDataModel.getHighLightedView().getLocationOnScreen(screenPos);
+        if (pepperLegDataModel.getHighLightedView() != null) {
+            pepperLegDataModel.getHighLightedView().getLocationOnScreen(screenPos);
+        }
 
         if (screenOffset == null) {
             screenOffset = new int[2];
