@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/PepperLeg.iml" filepath="$PROJECT_DIR$/PepperLeg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pepperleg/app.iml" filepath="$PROJECT_DIR$/pepperleg/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pepperleg/pepperleg.iml" filepath="$PROJECT_DIR$/pepperleg/pepperleg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pepperlegexample/pepperlegexample.iml" filepath="$PROJECT_DIR$/pepperlegexample/pepperlegexample.iml" />
+    </modules>
+  </component>
+</project>
