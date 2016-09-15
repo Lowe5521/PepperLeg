@@ -20,15 +20,15 @@ public class PepperLegOverlay extends RelativeLayout {
     private Path clipPath = new Path();
     private Path highlightPath = new Path();
     private Paint highlightPaint = new Paint();
-    private boolean removeExistingPath = false;
+    private boolean shouldRemoveExistingPath = false;
     private int[] screenPos = new int[2];
     private int[] screenOffset;
     private Queue<PepperLegDataModel> pepperLegDataModelQueue;
     private PepperLegDataModel pepperLegDataModel;
     private PepperLegPopup pepperLegPopup;
 
-    private final static int CLIP_PATH_PADDING = 12;
-    private final static int HIGHLIGHT_STROKE_WIDTH = 8;
+    private final static int CLIP_PATH_PADDING = 16;
+    private final static int HIGHLIGHT_STROKE_WIDTH = 12;
     private final static int HELPER_SPACING = 16;
     private final static int CORNER_RADIUS = 12;
 
@@ -43,8 +43,6 @@ public class PepperLegOverlay extends RelativeLayout {
     public PepperLegOverlay(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
-    //region programmatic constructor for drawing the stuff
 
     public PepperLegOverlay(Context context, Queue<PepperLegDataModel> pepperLegDataModelQueue) {
         super(context);
@@ -73,8 +71,6 @@ public class PepperLegOverlay extends RelativeLayout {
             }
         });
     }
-
-    //endregion
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -105,23 +101,29 @@ public class PepperLegOverlay extends RelativeLayout {
 
     private void unMaskView(Canvas canvas) {
         if (pepperLegDataModel.getHighLightedView() != null) {
-            if (removeExistingPath) {
-                canvas.clipPath(clipPath, Region.Op.UNION);
-                clipPath.reset();
-                highlightPath.reset();
-                removeExistingPath = false;
-            }
-
-            clipRect.set(getXOffset() - CLIP_PATH_PADDING,
-                    getYOffset() - CLIP_PATH_PADDING,
-                    getXOffset() + pepperLegDataModel.getHighLightedView().getWidth() + CLIP_PATH_PADDING,
-                    getYOffset() + pepperLegDataModel.getHighLightedView().getHeight() + CLIP_PATH_PADDING);
-            clipPath.addRoundRect(clipRect, CORNER_RADIUS, CORNER_RADIUS, Path.Direction.CW);
-            highlightPath.addRoundRect(clipRect, CORNER_RADIUS, CORNER_RADIUS, Path.Direction.CW);
-
+            removeExistingPath(canvas);
+            calculateClipRect(pepperLegDataModel.getHighLightedView());
             canvas.drawPath(highlightPath, highlightPaint);
             canvas.clipPath(clipPath, Region.Op.DIFFERENCE);
         }
+    }
+
+    private void removeExistingPath(Canvas canvas) {
+        if (shouldRemoveExistingPath) {
+            canvas.clipPath(clipPath, Region.Op.UNION);
+            clipPath.reset();
+            highlightPath.reset();
+            shouldRemoveExistingPath = false;
+        }
+    }
+
+    private void calculateClipRect(View highLightedView) {
+        clipRect.set(getXOffset() - CLIP_PATH_PADDING,
+                getYOffset() - CLIP_PATH_PADDING,
+                getXOffset() + highLightedView.getWidth() + CLIP_PATH_PADDING,
+                getYOffset() + highLightedView.getHeight() + CLIP_PATH_PADDING);
+        clipPath.addRoundRect(clipRect, CORNER_RADIUS, CORNER_RADIUS, Path.Direction.CW);
+        highlightPath.addRoundRect(clipRect, CORNER_RADIUS, CORNER_RADIUS, Path.Direction.CW);
     }
 
     private void createAndPositionHelper() {
@@ -222,7 +224,7 @@ public class PepperLegOverlay extends RelativeLayout {
             removeView(pepperLegPopup);
             pepperLegPopup = null;
 
-            removeExistingPath = true;
+            shouldRemoveExistingPath = true;
             pepperLegDataModel = pepperLegDataModelQueue.poll();
             requestLayout();
         } else {

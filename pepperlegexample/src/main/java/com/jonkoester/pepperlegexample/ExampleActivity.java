@@ -23,7 +23,6 @@ public class ExampleActivity extends AppCompatActivity {
         getFragmentManager().beginTransaction()
                 .add(R.id.act_example_container1, new FragmentTop(), FragmentTop.class.getSimpleName())
                 .add(R.id.act_example_container2, new FragmentMid(), FragmentMid.class.getSimpleName())
-                .add(R.id.act_example_container3, new FragmentBot(), FragmentBot.class.getSimpleName())
                 .commit();
     }
 
