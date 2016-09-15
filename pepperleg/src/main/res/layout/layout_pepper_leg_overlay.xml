@@ -3,7 +3,8 @@
     android:id="@+id/overlay_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/trans_gray">
+    android:background="@color/trans_gray"
+    android:clickable="true">
 
     <Button
         android:id="@+id/overlay_button"
